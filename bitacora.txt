@@ -1,0 +1,7 @@
+1. Crear el fichero package.json con npm init 
+2. Instalar express, consultar la documentación npm express
+3. Trabajamos con nodemon, para evitar relanzar a mano el servidor
+4. Usamos variables de entorno, con dotenv
+5. Creamos las rutas, en una carpeta rutas y hay definimos los endpoints, registro y login
+6. Creamos los controladores, con la lógica de las peticiones a los endpoints
+7. Le indicamos a la aplicación que vamos a usar el formato json
