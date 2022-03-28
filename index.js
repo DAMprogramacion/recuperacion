@@ -1,5 +1,8 @@
 const express = require('express')
 require('dotenv').config()
+const conectar = require('./bd/config')
+conectar()
+//y nos conectamos0
 //console.log(process.env)
 const usuario = require('./rutas/usuario')
 
@@ -12,7 +15,7 @@ app.use(express.json())
 app.use('/usuarios', usuario)
 
 app.get('/',  (req, res) => {
-  res.send('Hola Mundo')
+  res.send('Bienvenido a la app del proyecto')
 })
 
 const PORT = process.env.DEV_PORT || 3000
