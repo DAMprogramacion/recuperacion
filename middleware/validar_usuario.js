@@ -1,4 +1,5 @@
 const {response} = require('express')
+const jwt = require('jsonwebtoken')
 let mensajes = []
 const nombreValido = (nombre = '') =>{
     
@@ -58,4 +59,28 @@ const validarUsuarioLogin = (req, res = response, next) => {
     next()
 }
 
-module.exports = { validarUsuarioRegistro, validarUsuarioLogin }
+const validarToken = (req, res = response, next) => {
+    
+    const token = req.header('x-token')
+    if (!token) {
+        return res.status(400).json ({
+            ok : false,
+            msg : 'no token'
+        })
+    }
+    try {
+        const {id, email} =  jwt.verify(token, process.env.SECRET_KEY)
+        req.id_usuario = id
+        req.email  =email
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json ({
+            ok : false,
+            msg : 'token no válido'
+        })
+    }
+    
+    next()
+}
+
+module.exports = { validarUsuarioRegistro, validarUsuarioLogin, validarToken }

@@ -3,6 +3,7 @@ const Usuario =  require('../modelos/Usuario')
 const { generarToken } =  require('../helpers/jwt')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
+
 const registrar = async (req, res = response) => {
   
    let {nombre, email, password} = req.body
