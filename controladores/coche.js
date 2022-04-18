@@ -1,14 +1,43 @@
 const { response } = require('express')
 const Coche = require ('../modelos/Coche')
 
-const listarCoches =  (req, res) => {
-    const {id_usuario, email} = req
+const listarCoches = async (req, res) => {
+   // const {id_usuario, email} = req
+    const coches = await Coche.find()
     res.json({
         ok : true,
-        id_usuario,
-        email,
-        msg: 'listando coches'})
+        msg: 'listando coches',
+        coches
+    })
 }
+const listarCoche = async (req, res) => {
+     const {id_usuario} = req
+     const matricula = req.params.matricula
+
+     const coche = await Coche.findOne({matricula})
+    
+     if (!coche ) {
+        return res.status(401).json({
+            ok : false,
+            msg: 'no existe esa matrícula',
+            
+        })
+     }
+     //si coche suu id_usuario es el mismo que id_usario del token
+     //puedo listar el coche, si no digo que no está autorizado
+     if (coche.id_usuario != id_usuario) {
+         return res.status(401).json({
+            ok : false,
+            msg: 'no autorizado',
+            
+        })
+     }
+     res.json({
+         ok : true,
+         msg: 'listando coche',
+         coche
+     })
+ }
 
 const crearCoche = async (req, res) => {
 
@@ -45,7 +74,37 @@ const crearCoche = async (req, res) => {
     }
     
 }
+const borrarCoche = async (req, res) => {
+    const {id_usuario} = req
+    const matricula = req.params.matricula
+ 
+
+    let coche = await Coche.findOne({matricula})
+   
+    if (!coche ) {
+       return res.status(401).json({
+           ok : false,
+           msg: 'no existe esa matrícula',
+           
+       })
+    }
+    //si coche suu id_usuario es el mismo que id_usario del token
+    //puedo listar el coche, si no digo que no está autorizado
+    if (coche.id_usuario != id_usuario) {
+        return res.status(401).json({
+           ok : false,
+           msg: 'no autorizado',
+           
+       })
+    }
+    coche = await Coche.deleteOne({matricula})
+    res.json({
+        ok : true,
+        msg: 'borrado coche:',
+        coche
+    })
+}
 
 module.exports = {
-    listarCoches, crearCoche
+    listarCoches, crearCoche, listarCoche, borrarCoche
 }
